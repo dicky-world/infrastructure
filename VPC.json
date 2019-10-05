@@ -184,7 +184,7 @@
             ]
          }
       },
-      "PrivateSubnet3":{ 
+      "PublicSubnet5":{ 
          "Type":"AWS::EC2::Subnet",
          "Properties":{ 
             "VpcId":{ 
@@ -199,13 +199,13 @@
                { 
                   "Key":"Name",
                   "Value":{ 
-                     "Fn::Sub":"${NameTag}-${Environment}-DATA-PRV-A01"
+                     "Fn::Sub":"${NameTag}-${Environment}-API-PUB-A01"
                   }
                }
             ]
          }
       },
-      "PrivateSubnet4":{ 
+      "PublicSubnet6":{ 
          "Type":"AWS::EC2::Subnet",
          "Properties":{ 
             "VpcId":{ 
@@ -220,7 +220,7 @@
                { 
                   "Key":"Name",
                   "Value":{ 
-                     "Fn::Sub":"${NameTag}-${Environment}-DATA-PRV-B01"
+                     "Fn::Sub":"${NameTag}-${Environment}-API-PUB-B01"
                   }
                }
             ]
@@ -336,25 +336,25 @@
             }
          }
       },
-      "PrivateSubnet3RouteTableAssociation":{ 
+      "PublicSubnet5RouteTableAssociation":{ 
          "Type":"AWS::EC2::SubnetRouteTableAssociation",
          "Properties":{ 
             "RouteTableId":{ 
-               "Ref":"PrivateRouteTable"
+               "Ref":"PublicRouteTable"
             },
             "SubnetId":{ 
-               "Ref":"PrivateSubnet3"
+               "Ref":"PublicSubnet5"
             }
          }
       },
-      "PrivateSubnet4RouteTableAssociation":{ 
+      "PublicSubnet6RouteTableAssociation":{ 
          "Type":"AWS::EC2::SubnetRouteTableAssociation",
          "Properties":{ 
             "RouteTableId":{ 
-               "Ref":"PrivateRouteTable"
+               "Ref":"PublicRouteTable"
             },
             "SubnetId":{ 
-               "Ref":"PrivateSubnet4"
+               "Ref":"PublicSubnet6"
             }
          }
       }
@@ -390,14 +390,14 @@
             "Ref":"PrivateSubnet2"
          }
       },
-      "PrivateSubnet3":{ 
+      "PublicSubnet5":{ 
          "Value":{ 
-            "Ref":"PrivateSubnet3"
+            "Ref":"PublicSubnet5"
          }
       },
-      "PrivateSubnet4":{ 
+      "PublicSubnet6":{ 
          "Value":{ 
-            "Ref":"PrivateSubnet4"
+            "Ref":"PublicSubnet6"
          }
       },
       "VpcId":{ 

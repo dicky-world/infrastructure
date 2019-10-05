@@ -37,16 +37,16 @@
       "APISecurityGroup":{ 
          "Type":"String"
       },
-      "PublicSubnet3":{ 
+      "WEBSubnet1":{ 
          "Type":"String"
       },
-      "PublicSubnet4":{ 
+      "WEBSubnet2":{ 
          "Type":"String"
       },
-      "PrivateSubnet3":{ 
+      "APISubnet1":{ 
          "Type":"String"
       },
-      "PrivateSubnet4":{ 
+      "APISubnet2":{ 
          "Type":"String"
       },
       "WEBPublicAlbTargetGroupArn":{ 
@@ -104,10 +104,10 @@
                   ],
                   "Subnets":[ 
                      { 
-                        "Ref":"PublicSubnet3"
+                        "Ref":"WEBSubnet1"
                      },
                      { 
-                        "Ref":"PublicSubnet4"
+                        "Ref":"WEBSubnet2"
                      }
                   ]
                }
@@ -159,10 +159,10 @@
                   ],
                   "Subnets":[ 
                      { 
-                        "Ref":"PrivateSubnet3"
+                        "Ref":"APISubnet1"
                      },
                      { 
-                        "Ref":"PrivateSubnet4"
+                        "Ref":"APISubnet2"
                      }
                   ]
                }

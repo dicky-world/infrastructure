@@ -28,7 +28,8 @@
       },
       "WEBGitHubRepositoryName":{ 
          "Description":"GitHub Repository Name",
-         "Type":"String"
+         "Type":"String",
+         "Default":"webapp"
       },
       "WEBRepositoryBranch":{ 
          "Description":"GitHub Repository Branch",
@@ -40,7 +41,8 @@
       },
       "WEBRepositoryName":{ 
          "Description":"GitHub Repository Name",
-         "Type":"String"
+         "Type":"String",
+         "Default":"web-ecr-repository"
       },
       "WEBGitHubOwner":{ 
          "Description":"GitHub Repository Name",
@@ -48,7 +50,8 @@
       },
       "APIGitHubRepositoryName":{ 
          "Description":"GitHub Repository Name",
-         "Type":"String"
+         "Type":"String",
+         "Default":"api"
       },
       "APIRepositoryBranch":{ 
          "Description":"GitHub Repository Branch",
@@ -60,7 +63,8 @@
       },
       "APIRepositoryName":{ 
          "Description":"GitHub Repository Name",
-         "Type":"String"
+         "Type":"String",
+         "Default":"api-ecr-repository"
       },
       "APIGitHubOwner":{ 
          "Description":"GitHub Repository Name",
@@ -233,28 +237,28 @@
                      "Outputs.APISecurityGroup"
                   ]
                },
-               "PublicSubnet3":{ 
+               "WEBSubnet1":{ 
                   "Fn::GetAtt":[ 
                      "VPC",
                      "Outputs.PublicSubnet3"
                   ]
                },
-               "PublicSubnet4":{ 
+               "WEBSubnet2":{ 
                   "Fn::GetAtt":[ 
                      "VPC",
                      "Outputs.PublicSubnet4"
                   ]
                },
-               "PrivateSubnet3":{ 
+               "APISubnet1":{ 
                   "Fn::GetAtt":[ 
                      "VPC",
-                     "Outputs.PrivateSubnet3"
+                     "Outputs.PublicSubnet5"
                   ]
                },
-               "PrivateSubnet4":{ 
+               "APISubnet2":{ 
                   "Fn::GetAtt":[ 
                      "VPC",
-                     "Outputs.PrivateSubnet4"
+                     "Outputs.PublicSubnet6"
                   ]
                },
                "WEBPublicAlbTargetGroupArn":{ 

@@ -12,7 +12,9 @@
          "Default":"DEV"
       },
       "WEBGitHubRepositoryName":{ 
-         "Type":"String"
+         "Description":"GitHub Repository Name",
+         "Type":"String",
+         "Default":"webapp"
       },
       "WEBRepositoryBranch":{ 
          "Type":"String"
@@ -28,10 +30,14 @@
          "Type":"String"
       },
       "WEBRepositoryName":{ 
-         "Type":"String"
+         "Description":"GitHub Repository Name",
+         "Type":"String",
+         "Default":"web-ecr-repository"
       },
       "APIGitHubRepositoryName":{ 
-         "Type":"String"
+         "Description":"GitHub Repository Name",
+         "Type":"String",
+         "Default":"api"
       },
       "APIRepositoryBranch":{ 
          "Type":"String"
@@ -47,7 +53,9 @@
          "Type":"String"
       },
       "APIRepositoryName":{ 
-         "Type":"String"
+         "Description":"GitHub Repository Name",
+         "Type":"String",
+         "Default":"api-ecr-repository"
       }
    },
    "Resources":{ 
@@ -224,6 +232,12 @@
                      "Name":"REPOSITORY_URI",
                      "Value":{ 
                         "Fn::Sub":"${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${WEBRepositoryName}"
+                     }
+                  },
+                  { 
+                     "Name":"CONTAINER_NAME",
+                     "Value":{ 
+                        "Fn::Sub":"${NameTag}-${Environment}-WEB-Container"
                      }
                   }
                ]
@@ -525,6 +539,12 @@
                      "Name":"REPOSITORY_URI",
                      "Value":{ 
                         "Fn::Sub":"${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${APIRepositoryName}"
+                     }
+                  },
+                  { 
+                     "Name":"CONTAINER_NAME",
+                     "Value":{ 
+                        "Fn::Sub":"${NameTag}-${Environment}-API-Container"
                      }
                   }
                ]
