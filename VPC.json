@@ -184,7 +184,7 @@
             ]
          }
       },
-      "PrivateSubnet3":{
+      "PrivateSubnet3":{ 
          "Type":"AWS::EC2::Subnet",
          "Properties":{ 
             "VpcId":{ 
