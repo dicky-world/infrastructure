@@ -18,6 +18,26 @@
       "AZ2":{ 
          "Type":"AWS::EC2::AvailabilityZone::Name"
       },
+      "MainDomainName":{ 
+         "AllowedPattern":"^(?!http)(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
+         "Description":"The main domain name (e.g. example.com).",
+         "Type":"String"
+      },
+      "WEBSubDomainPrefix":{ 
+         "AllowedPattern":"^(?!http)(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
+         "Description":"The prefix of sub domain name of the WebApp (e.g. web).",
+         "Type":"String"
+      },
+      "APISubDomainPrefix":{ 
+         "AllowedPattern":"^(?!http)(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
+         "Description":"The prefix of sub domain name of the API (e.g. api).",
+         "Type":"String"
+      },
+      "HostedZoneId":{  
+         "Type":"String",
+         "Description":"The ID Of The Hosted Zone Where The Certificate's Records Will Be Added",
+         "Default":"Z2STHFEWPT6599"
+      },
       "WEBDesiredCount":{ 
          "Type":"Number",
          "Default":2
@@ -152,6 +172,74 @@
                      "SG",
                      "Outputs.APIALBSecurityGroup"
                   ]
+               },
+               "AcmCertificateArn":{ 
+                  "Fn::GetAtt":[ 
+                     "ACM",
+                     "Outputs.AcmCertificateArn"
+                  ]
+               },
+               "MainDomainName":{ 
+                  "Ref":"MainDomainName"
+               },
+               "APISubDomainPrefix":{ 
+                  "Ref":"APISubDomainPrefix"
+               }
+            }
+         }
+      },
+      "Route53":{ 
+         "DependsOn":"ALB",
+         "Type":"AWS::CloudFormation::Stack",
+         "Properties":{ 
+            "TemplateURL":"https://s3.amazonaws.com/dkw-nested-bucket/R53.json",
+            "Parameters":{ 
+               "WEBDnsEndpoint":{ 
+                  "Fn::GetAtt":[ 
+                     "ALB",
+                     "Outputs.WEBAlbDnsName"
+                  ]
+               },
+               "APIDnsEndpoint":{ 
+                  "Fn::GetAtt":[ 
+                     "ALB",
+                     "Outputs.APIAlbDnsName"
+                  ]
+               },
+               "WEBHostedZoneID":{ 
+                  "Fn::GetAtt":[ 
+                     "ALB",
+                     "Outputs.WEBPublicAlbCanonicalHostedZoneId"
+                  ]
+               },
+               "APIHostedZoneID":{ 
+                  "Fn::GetAtt":[ 
+                     "ALB",
+                     "Outputs.APIPublicAlbCanonicalHostedZoneId"
+                  ]
+               },
+               "MainDomainName":{ 
+                  "Ref":"MainDomainName"
+               },
+               "WEBSubDomainPrefix":{ 
+                  "Ref":"WEBSubDomainPrefix"
+               },
+               "APISubDomainPrefix":{ 
+                  "Ref":"APISubDomainPrefix"
+               }
+            }
+         }
+      },
+      "ACM":{ 
+         "Type":"AWS::CloudFormation::Stack",
+         "Properties":{ 
+            "TemplateURL":"https://s3.amazonaws.com/dkw-nested-bucket/ACM.json",
+            "Parameters":{ 
+               "HostedZoneId":{ 
+                  "Ref":"HostedZoneId"
+               },
+               "MainDomainName":{ 
+                  "Ref":"MainDomainName"
                }
             }
          }
@@ -276,7 +364,8 @@
             }
          }
       },
-      "Pipeline":{ 
+      "Pipeline":{
+         "DependsOn":"ALB", 
          "Type":"AWS::CloudFormation::Stack",
          "Properties":{ 
             "TemplateURL":"https://s3.amazonaws.com/dkw-nested-bucket/Pipeline.json",

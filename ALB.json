@@ -26,6 +26,19 @@
       },
       "APIALBSecurityGroup":{ 
          "Type":"String"
+      },
+      "AcmCertificateArn":{ 
+         "Type":"String"
+      },
+      "MainDomainName":{ 
+         "AllowedPattern":"^(?!http)(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
+         "Description":"The main domain name (e.g. example.com).",
+         "Type":"String"
+      },
+      "APISubDomainPrefix":{ 
+         "AllowedPattern":"^(?!http)(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
+         "Description":"The prefix of sub domain name of the api (e.g. api).",
+         "Type":"String"
       }
    },
    "Resources":{ 
@@ -68,8 +81,45 @@
             "Protocol":"HTTP",
             "DefaultActions":[ 
                { 
+                  "Type":"redirect",
+                  "RedirectConfig" : {
+
+                     "Host" : "#{host}",
+                     
+                     "Path" : "/#{path}",
+                     
+                     "Port" : "443",
+                     
+                     "Protocol" : "HTTPS",
+                     
+                     "Query" : "#{query}",
+                     
+                     "StatusCode" : "HTTP_302"
+                     
+                     }
+               }
+            ]
+         }
+      },
+      "WEBLoadBalancerHTTPSListener":{  
+         "Type":"AWS::ElasticLoadBalancingV2::Listener",
+         "Properties":{
+            "LoadBalancerArn":{ 
+               "Ref":"WEBApplicationLoadBalancer"
+            },
+            "Port":443,
+            "Protocol":"HTTPS",  
+            "Certificates":[  
+               {
+                  "CertificateArn": { 
+                     "Ref":"AcmCertificateArn"
+                  }
+               }
+            ],
+            "DefaultActions":[  
+               {  
                   "Type":"forward",
-                  "TargetGroupArn":{ 
+                  "TargetGroupArn":{  
                      "Ref":"WEBALBTargetGroup"
                   }
                }
@@ -141,8 +191,45 @@
             "Protocol":"HTTP",
             "DefaultActions":[ 
                { 
+                  "Type":"redirect",
+                  "RedirectConfig" : {
+
+                     "Host" : "#{host}",
+                     
+                     "Path" : "/#{path}",
+                     
+                     "Port" : "443",
+                     
+                     "Protocol" : "HTTPS",
+                     
+                     "Query" : "#{query}",
+                     
+                     "StatusCode" : "HTTP_302"
+                     
+                     }
+               }
+            ]
+         }
+      },
+      "APILoadBalancerHTTPSListener":{  
+         "Type":"AWS::ElasticLoadBalancingV2::Listener",
+         "Properties":{
+            "LoadBalancerArn":{ 
+               "Ref":"APIApplicationLoadBalancer"
+            },
+            "Port":443,
+            "Protocol":"HTTPS",  
+            "Certificates":[  
+               {
+                  "CertificateArn": { 
+                     "Ref":"AcmCertificateArn"
+                  }
+               }
+            ],
+            "DefaultActions":[  
+               {  
                   "Type":"forward",
-                  "TargetGroupArn":{ 
+                  "TargetGroupArn":{  
                      "Ref":"APIALBTargetGroup"
                   }
                }
@@ -210,6 +297,22 @@
             "Fn::GetAtt":[ 
                "APIApplicationLoadBalancer",
                "CanonicalHostedZoneID"
+            ]
+         }
+      },
+      "WEBAlbDnsName":{ 
+         "Value":{ 
+            "Fn::GetAtt":[ 
+               "WEBApplicationLoadBalancer",
+               "DNSName"
+            ]
+         }
+      },
+      "APIAlbDnsName":{ 
+         "Value":{ 
+            "Fn::GetAtt":[ 
+               "APIApplicationLoadBalancer",
+               "DNSName"
             ]
          }
       }
